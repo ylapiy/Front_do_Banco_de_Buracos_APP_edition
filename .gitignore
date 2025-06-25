@@ -1,0 +1,19 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Capacitor cache e build temporária
+.plugins/
+.capacitor/
+
+# Plataformas nativas (Android/iOS)
+android/
+ios/
+
+# IDEs e sistemas
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
