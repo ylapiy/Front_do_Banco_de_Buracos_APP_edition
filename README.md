@@ -6,6 +6,12 @@ Aplicativo do Desemburaca Teresina, sendo uma aplicação para denúncia de bura
 
 O _Desemburaca Teresina_ é uma plataforma que facilita a comunicação entre cidadãos e a prefeitura municipal para reportar problemas de infraestrutura viária. O sistema permite que os usuários fotografem buracos nas ruas e enviem denúncias com localização GPS automática, agilizando o processo de manutenção urbana.
 
+## App Web + Capacitor
+
+Esta versão do projeto é um aplicativo híbrido criado com HTML, CSS e JavaScript puro, usando o Capacitor para empacotar como app Android/iOS.
+
+A pasta principal do front-end é www/.
+
 ## ✨ Funcionalidades
 
 - 📸 _Captura de fotos_ com dados GPS automáticos
@@ -40,22 +46,43 @@ O _Desemburaca Teresina_ é uma plataforma que facilita a comunicação entre ci
 
 ## 📁 Estrutura do Projeto
 
-desemburaca-teresina/
+Desemburaca_Teresina_App/
+├── www/               # Código-fonte do site (HTML, JS, CSS)
+├── package.json       # Dependências e scripts
+├── capacitor.config.ts|json  # Configuração do Capacitor
+├── package-lock.json 
+├── README.md
+└── ...
+
+
+www/
 ├── app/
 │ ├── home/ # Página inicial
 │ ├── form/ # Formulário de denúncia
-│ ├── serv/ # Visualização de serviços
 │ ├── sobre/ # Informações do projeto
 │ └── ajuda/ # Página de ajuda
-├── assets/ # Recursos estáticos
-│ ├── images/ # Imagens do projeto
-│ └── icons/ # Ícones da interface
+├── assets/ # Recursos estáticos 
 ├── index.html # Redirecionamento inicial
 ├── loading.css # Css para tela de carregaemnto
-├── Documentação.pdf # Documentação das princiapis partes do codigo (100% de certeza esta desatualizada a essa ponto)
 └── README.md
 
 ## 📱 Como Usar
+
+###Para Montar o aplicativo
+
+.Pre requisito - Node.js
+
+1. _Clonar o repositorio
+    - git clone_ https://github.com/seu-usuario/seu-repo.git
+    - cd seu-repo_
+2. _Instalar as dependências_
+    - npm install
+3. _Adicionar a plataforma Android_
+    - npx cap add android
+4. _Sincronizar o código web com a plataforma nativa_
+    - npx cap sync
+5. _Abrir o projeto no Android Studio_
+    - npx cap open android_
 
 ### Para Cidadãos
 
