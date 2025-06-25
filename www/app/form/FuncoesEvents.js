@@ -1,0 +1,231 @@
+import {PreparandoEnvioOFF,tentarEnviar,LeituraDefoto,RevesaoGeografica, DriveUploader,PostBancoDeDados,loopDeAnim,LimpezadeForm,LeituraPelaCamera} from './FuncoesPrincipais.js'
+
+
+window.esperandoConc =  localStorage.getItem('SerReiniciar')
+window.lat2 = null;
+window.lon2 = null;
+window.Data = null;
+window.Foto = null;
+window.Rua = null;
+window.Bairro = null;
+window.timeoutAnimacao = null;
+
+console.log(localStorage.getItem('SerReiniciar'))
+console.log(window.esperandoConc)
+
+/*  script para verificar se a imagem tem tudo certinho, data, gps e depois se internet ta on ne,
+    agora se tu me perguntar, pq um site opção de selavar offline, eu te respondo, boa pergunta! Não mas, a
+    agora é serio, é pq mesmo sentdo um site agora isso foi pensado pra posteriomenter virar aplicativo
+    então na realidade faz sentido (eu acho) */
+
+document.getElementById('form-denuncia').addEventListener('submit', (Entrada) => {  
+            Entrada.preventDefault()
+            const arquivo = document.getElementById('photo');
+            const camera = document.getElementById('camera');
+            const butao = document.querySelector('.submit-btn');
+            const formulario = document.getElementById('form-denuncia')
+            var categoria = null
+
+            if(formulario.size.value == "small"){categoria = 3}else{if(formulario.size.value == "medium"){categoria = 4}else{if(formulario.size.value == "large"){categoria = 5}}}
+            if(formulario.risk.value == "smal"){categoria = categoria + 3}else{if(formulario.risk.value == "medium"){categoria = categoria + 4}else{if(formulario.risk.value == "large") categoria = categoria + 5}}
+
+            console.log("Arquivo selecionado:", arquivo.files.length);
+            console.log("Camera selecionada:", camera.files.length);
+
+            if(arquivo.files.length || camera.files.length){
+                if(butao.textContent == "Enviar Denuncia"){
+                    console.log('enviando denuncia')
+                    butao.textcontent = "Enviando Denuncia, aguarde"
+                    console.log('Situação da conc:', window.esperandoConc)
+                    butao.disabled = true; 
+
+                    RevesaoGeografica(window.lon2,window.lat2).then(() => {
+                    butao.disabled = true; 
+                    console.log(window.Data,categoria,formulario.description.value,window.Nome,window.lon2,window.lat2,window.Bairro,window.Rua)
+                    PostBancoDeDados(window.Data,categoria,formulario.description.value,window.Nome,window.lon2,window.lat2,window.Bairro,window.Rua) 
+                    DriveUploader(window.Foto).then(() => {butao.disabled = false;butao.textcontent = "Enviar Denúncia";
+                    document.querySelector('.popupenvio').style.visibility = 'visible';
+                    document.querySelector('.popupenvio').style.display = 'flex';
+                    document.querySelector('.fundoescuro').style.visibility = 'visible';
+                    document.querySelector('.fundoescuro').style.display = 'flex';
+                    LimpezadeForm();
+                    ;}) 
+                    
+                    var contador = 0
+                    loopDeAnim(contador,"Enviando Denuncia, aguarde") 
+
+                    })
+
+                }else{
+                    window.esperandoConc = true;
+                    butao.disabled = true;
+                    console.log('salvando denuncia')
+                    console.log('Esperando conc:', window.esperandoConc)
+
+                    localStorage.setItem('SerReiniciar',window.esperandoConc );
+                    console.log(localStorage.getItem('SerReiniciar'))
+
+                    PreparandoEnvioOFF()
+
+                    var contador = 0
+                    loopDeAnim(contador,"Denuncia Salva, esperando conexão com a internet para finalizar a denuncia")
+                }
+
+            }else{
+                document.querySelector('.popupfaltaImage').style.visibility = 'visible';
+                document.querySelector('.popupfaltaImage').style.display = 'flex';
+                document.querySelector('.fundoescuro').style.visibility = 'visible';
+                document.querySelector('.fundoescuro').style.display = 'flex';
+                return;
+            }
+});
+        
+document.getElementById('photo').addEventListener('change', (Entrada) => {
+
+             const camera = document.getElementById('iconecamera')
+             camera.innerText =  "📷 Usar Câmera"
+             document.getElementById('camera').value = ""; 
+
+             const arquivo = document.getElementById('iconephoto')
+             arquivo.innerText = "📁 Colocar Foto da Galeria - ✔️"
+             LeituraDefoto(Entrada)  
+});
+        
+document.getElementById('camera').addEventListener('change', (Entrada) => {
+            const camera = document.getElementById('iconecamera')
+            camera.innerText =  "📷 Usar Câmera - ✔️ "
+
+            const arquivo = document.getElementById('iconephoto')
+            document.getElementById('photo').value = ""; 
+            arquivo.innerText = "📁 Colocar Foto da Galeria"
+            LeituraPelaCamera(Entrada)
+});
+
+document.getElementById('fecharenvio').addEventListener('click',() =>{
+    document.querySelector('.popupenvio').style.visibility = 'hidden';
+    document.querySelector('.popupenvio').style.display = 'none';
+    document.querySelector('.fundoescuro').style.visibility = 'hidden';
+    document.querySelector('.fundoescuro').style.display = 'hidden';
+});
+
+document.getElementById('fecharimagem').addEventListener('click',() =>{
+    document.querySelector('.popupfaltaImage').style.visibility = 'hidden';
+    document.querySelector('.popupfaltaImage').style.display = 'none';
+    document.querySelector('.fundoescuro').style.visibility = 'hidden';
+    document.querySelector('.fundoescuro').style.display = 'hidden';
+});
+
+document.getElementById('fecharnaoenvio').addEventListener('click', () =>{
+    document.querySelector('.popupnaoenvio').style.visibility = 'hidden';
+    document.querySelector('.popupnaoenvio').style.display = 'none';
+    document.querySelector('.fundoescuro').style.visibility = 'hidden';
+    document.querySelector('.fundoescuro').style.display = 'none';
+
+
+
+})
+
+
+document.addEventListener('deviceready', async () => {
+    const network = Capacitor.Plugins.Network || window.Network
+    const status = await network.getStatus()
+    const butao = document.querySelector('.submit-btn');
+
+    console.log('Conectado? ', status.connected)
+
+    if(status.connected) {
+        Window.esperandoConc = false;
+        butao.textContent = "Enviar Denuncia"; 
+    }else{
+        butao.textContent = "Salvar Denuncia"; 
+    }
+
+    let statusAnterior = status;
+
+    network.addListener('networkStatusChange', (status) => {
+
+        if(statusAnterior != null && status.connected === statusAnterior.connected) {
+            return;
+        }
+
+        statusAnterior = status
+
+        console.log('Mudança de rede: ', status.connected)
+
+        const butao = document.querySelector('.submit-btn');
+
+        if(status.connected) {
+            if(window.timeoutAnimacao) {
+                clearTimeout(window.timeoutAnimacao);
+                window.timeoutAnimacao = null;
+            }
+
+            if(window.esperandoConc === true) {
+                window.esperandoConc = false;
+                localStorage.setItem('SerReiniciar', window.esperandoConc);
+
+                try {
+                    butao.disabled = true;
+
+                    let contador = 0;
+                    loopDeAnim(contador, "Enviando Denúncia, aguarde");
+                    tentarEnviar();
+                } catch (err) {
+                    console.error(err);
+                }
+                butao.textContent = "Enviar Denúncia";
+            } 
+        } else {
+            butao.textContent = "Salvar Denúncia";
+        }
+    })
+})
+
+/*
+Network.addListener('networkStatusChange', status => {
+    const butao = document.querySelector('.submit-btn');
+    const formulario = document.getElementById('form-denuncia');
+
+    if(status.connected) {
+        if(window.timeoutAnimacao) {
+            clearTimeout(window.timeoutAnimacao);
+            window.timeoutAnimacao = null;
+        }
+
+        if(window.esperandoConc === true) {
+            window.esperandoConc = false;
+            localStorage.setItem('SerReiniciar', window.esperandoConc);
+
+            try {
+                butao.disabled = true;
+
+                let contador = 0;
+                loopDeAnim(contador, "Enviando Denúncia, aguarde");
+                tentarEnviar();
+            } catch (err) {
+                console.error(err);
+            }
+            butao.textContent = "Enviar Denúncia";
+        } 
+    } else {
+        butao.textContent = "Salvar Denúncia";
+    }
+})
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+           const butao = document.querySelector('.submit-btn');
+           const status = await Network.getStatus();
+
+           if(status.connected){
+            Window.esperandoConc = false;
+            butao.textContent = "Enviar Denuncia"; 
+           }else{
+            butao.textContent = "Salvar Denuncia"; 
+           }
+});
+*/
+
+//eu sinto que a minha cabeça vai sair do meu corpo a cada linha escrita, sera que eu to ficando doido?
+//quando eu leio esse comentarios eu so leio ou uma voz na minha cabeça que le pra mim e eu escuto ela,
+//pera mas eu acho normal ouvir uma voz, é eu to ficando doido

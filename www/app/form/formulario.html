@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Denúncia</title>
+    <link rel="stylesheet" href="formulario.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="../../assets/logoPrefeitura.svg" alt="Logo da Prefeitura" class="imagemLogodaPrefeitura">
+            <span class="NomedaAplicação">| Desemburaca Teresina - Denuncia</span>
+        </div>
+        <div class="navbar-links">
+            <a href="../form/formulario.html" style="text-decoration: none;"><span class="textoDaBarraSub" >Denunciar</span></a>
+            <a href="../home/index.html" style="text-decoration: none"><span class="textoDaBarra">Inicio</span></a>
+            <a href="../ajuda/ajuda.html" style="text-decoration: none"><span class="textoDaBarra">Ajuda</span></a>
+            <a href="../sobre/sobre.html" style="text-decoration: none"><span class="textoDaBarra">Equipe</span></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <div class="fundoescuro">
+        <div class ="popupenvio">
+            <H2>Denuncia enviada com sucesso!</H2>
+            <button class="fechar" id="fecharenvio">X</button>
+        </div>
+        <div class="popupnaoenvio">
+            <h2>Houve um erro no envio!</h2>
+            <p>Por favor, tente enviar novamente</p>
+            <button class="fechar" id="fecharnaoenvio">X</button>
+        </div>
+        <div class="popupfaltaImage">
+            <h1>Denuncia sem foto!</h1>
+            <H2>É necessário uma foto colocada junto do envio, por favor use uma das duas opções disponíveis.</H2>
+            <button class="fechar" id="fecharimagem">X</button>
+        </div>
+        </div>
+
+        <form class="form-container" id="form-denuncia">
+            <h2>Formulário de Denúncia</h2>
+            
+            <div class="form-group">
+                 <label for="risk">Localização:</label>
+                    <select id="risk" name="risk" required>
+                    <option value="">Selecione o local</option>
+                    <option value="small">Na calçada ou perto desta (risco pequeno)</option>
+                    <option value="medium">Na Lateral da rua (risco medio)</option>
+                    <option value="large">No meio da rua (risco grande)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="size">Tamanho do buraco:</label>
+                <select id="size" name="size" required>
+                    <option value="">Selecione o tamanho</option>
+                    <option value="small">Pequeno (até 30cm)</option>
+                    <option value="medium">Médio (30cm - 1m)</option>
+                    <option value="large">Grande (mais de 1m)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descrição adicional:</label>
+                <textarea id="description" name="description" rows="4" placeholder="Descreva detalhes adicionais sobre o a localização do buraco" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="photo">Foto do buraco :</label>
+                <input type="file" id="photo" name="photo" accept="image/*, text/plain" style="display:none;">
+                <button class="botaodecamera" type="button" id="iconephoto"  onclick="document.getElementById('photo').click()">📁 Colocar Foto da Galeria</button>
+                <label for="camera">Tirar foto agora :</label>
+                <input type="file" id="camera" name="camera" accept="image/*" capture="environment" style="display:none;">
+                <button class="botaodecamera" type="button" id="iconecamera" onclick="document.getElementById('camera').click()">📷 Usar Câmera</button>
+            </div>
+
+           <div class="conteinerDeBotoes">
+                <button class="submit-btn" id="submit">Enviar Denuncia</button>
+                <a href="../ajuda/ajuda.html"><button type="button" class="botaolinkaajuda" id="linkajuda">i</button></a>
+           </div>
+        </form>
+
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+<script src="TeresinaPontos.js"></script> 
+<script type="module" src="FuncoesEvents.js"></script>
+
+</body>
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-left">
+            <p>&copy; 2025 Prefeitura Municipal de Teresina - Desemburaca Teresina. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+</html>
