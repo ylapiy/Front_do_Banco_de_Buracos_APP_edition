@@ -2,6 +2,8 @@
 
 Aplicativo do Desemburaca Teresina, sendo uma aplicação para denúncia de buracos nas vias públicas de Teresina, desenvolvido como projeto acadêmico do Centro Universitário iCEV.
 
+https://github.com/ylapiy/Desemburaca-Teresina_APK - Repositorio com o apk
+
 ## 📋 Sobre o Projeto
 
 O _Desemburaca Teresina_ é uma plataforma que facilita a comunicação entre cidadãos e a prefeitura municipal para reportar problemas de infraestrutura viária. O sistema permite que os usuários fotografem buracos nas ruas e enviem denúncias com localização GPS automática, agilizando o processo de manutenção urbana.
